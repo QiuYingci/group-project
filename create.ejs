@@ -19,7 +19,7 @@ app.post('/login', (req, res) => {
   const studentId = req.body.studentId;
   const password = req.body.password;
 
-  const student = students.find(s => s.id == studentId);
+const student = students.find(s => s.id == studentId);
 
   if (student && student.password == password) {
     res.render('success', { student: student });
