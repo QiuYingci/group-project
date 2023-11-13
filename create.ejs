@@ -1,19 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>学生信息查询</title>
-</head>
-<body>
-    <h1>学生信息查询</h1>
-    <form id="searchForm">
-        <label for="studentId">学生ID:</label>
-        <input type="text" id="studentId" name="studentId">
-        <button type="submit">Search</button>
-    </form>
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
 
-    <div id="searchResult"></div>
+app.set('view engine', 'ejs');
 
-    <a href=" ">返回Home</a >
+app.use(bodyParser.urlencoded({ extended: false }));
 
-</body>
-</html>
+const students = [
+  { id: '123', password: '123', name: 'Ann'},
+  { id: '456', password: '456', name: 'Znn'}
+];
+
+app.get(‘/login, (req, res) => {
+  res.render('login');
+});
+
+app.post('/login', (req, res) => {
+  const studentId = req.body.studentId;
+  const password = req.body.password;
+
+  const student = students.find(s => s.id == studentId);
+
+  if (student && student.password == password) {
+    res.render('success', { student: student });
+    console.log('you are successful.');
+ } else {
+    res.render('failure');
+    console.log('you are fail.');
+  }
+});
+
+app.listen(8899, () => {
+  console.log(’server started, listening on port  8899 );
+});
