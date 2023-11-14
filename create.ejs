@@ -1,35 +1,19 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-
-const students = [
-  { id: '123', password: '123'},
-  { id: '456', password: '456'}
-];
-
-app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get('/login', (req, res) => {
-  console.log("Welcome!")
-  return res.status(200).render("login");
-});
-
-app.post('/login', (req, res) => {
-  const studentId = req.body.studentId;
-  const password = req.body.password;
-
-  const student = students.find(s => s.id == studentId);
-
-  if (student && student.password == password) {
-    res.render('success');
-    console.log('you are successful.');
-    
- } else {
-    res.render('failure');
-    console.log('Error.');
-    
-  }
-});
-
-app.listen(process.env.PORT || 8899);  
+<html>
+<head>
+    <title>Student login</title>
+</head>
+<body>
+    <h2>Student login</h2>
+    <% if (error){ %>
+    <p><%= error %></p><%}%>
+    <form action=“/login" method="POST">
+        <label for="student_id">student_id:</label>
+        <input type="text" id="student_id" name="student_id" required><br><br>
+        
+        <label for="password">password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
