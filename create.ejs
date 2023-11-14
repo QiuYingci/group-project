@@ -27,8 +27,8 @@ app.post('/login', (req, res) => {
     
  } else {
     res.render('failure');
-    console.log('you are fail.');
-    return res.status(200).redirect(“/home");
+    console.log('Error.');
+    
   }
 });
 
