@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const students = [
   { id: '123', password: '123', name: 'Ann'},
@@ -12,6 +12,7 @@ const students = [
 ];
 
 app.get('/login', (req, res) => {
+  console.log("Welcome!")
   res.render('login');
 });
 
@@ -19,10 +20,10 @@ app.post('/login', (req, res) => {
   const studentId = req.body.studentId;
   const password = req.body.password;
 
-const student = students.find(s => s.id == studentId);
+  const student = students.find(s => s.id == studentId);
 
   if (student && student.password == password) {
-    res.render('success', { student: student });
+    res.render('success', { student });
     console.log('you are successful.');
  } else {
     res.render('failure');
@@ -30,6 +31,4 @@ const student = students.find(s => s.id == studentId);
   }
 });
 
-app.listen(8899, () => {
-  console.log("server started, listening on port  8899" );
-});
+app.listen(app.listen(process.env.PORT || 8899));
