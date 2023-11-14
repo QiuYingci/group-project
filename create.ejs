@@ -26,29 +26,10 @@ app.post('/login', (req, res) => {
     console.log('you are successful.');
     
  } else {
-    var error = 'please enter again.';
-    res.status(200).render('login',{error:error});
+    res.status(200).render('login',{error:'please enter again'});
     console.log('Error.');
     
   }
 });
 
-app.listen(process.env.PORT || 8899);  <html>
-<head>
-    <title>Student login</title>
-</head>
-<body>
-    <h2>Student login</h2>
-    <% if (error){ %>
-    <p><%= error%>, please try again.</p><%}%>
-    <form action="/login" method="POST">
-        <label for="student_id">student_id:</label>
-        <input type="text" id="student_id" name="student_id" required><br><br>
-        
-        <label for="password">password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        
-        <button type="submit">Login</button>
-    </form>
-</body>
-</html>
+app.listen(process.env.PORT || 8899);  
