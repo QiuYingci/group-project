@@ -22,12 +22,14 @@ app.post('/login', (req, res) => {
   const student = students.find(s => s.id == studentId);
 
   if (student && student.password == password) {
-    res.redirect('/home');
+    return res.status(200).redirect("/home");
     console.log('you are successful.');
     
  } else {
-    res.status(200).render('login',{error:'please enter again'});
+    var error = 'Incorrect password';
+    res.status(200).render('login',{error:error});
     console.log('Error.');
+    return res.redirect("/");
     
   }
 });
