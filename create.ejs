@@ -17,15 +17,19 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
  const createDocument = function(db,req){
-                  db.collection('student').insertOne({"StudentName":req.body.student_name,"StudentID":req.body.student_id}, function(error, results){
-                if(error){
-                  throw error;}
-                 console.log(results);
-                
+            client.connect(function(err) {assert.equal(null, err);
+                console.log("Connected successfully to the MongoDB database server.");})
+                db.collection('student').insertOne({"StudentName":req.body.student_name,"StudentID":req.body.student_id, function(error, results){if(error){
+                    throw error;
+                    console.log(results);}
+                    
+                ;}
+            })
             client.close(() => console.log(`connected to Mongodb server.`));
-        });
-     }
+        }
+     
 app.get('/login', (req, res) => {
   console.log("Welcome!")
   return res.status(200).render("login",{error:null});
@@ -59,13 +63,8 @@ app.post('/login', (req, res) => {
 
    app.post('/create',(req,res) => {
    const db=client.db(dbName);
+
    createDocument(db,req);
     
 });  
-
-   client.connect(function(err) {assert.equal(null, err);
-   console.log("Connected successfully to the MongoDB database server.");
-                
-                
-                
 app.listen(process.env.PORT || 8899);
