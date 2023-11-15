@@ -1,21 +1,15 @@
-<html>
-<head>
-    <title>Student login</title>
-</head>
-<body>
-    <h2>Student login</h2>
-    <% if (error){ %>
-    <p><%= error %></p>
-    <% } %>
-   
-    <form action="/login" method="POST">
-        <label for="student_id">student_id:</label>
-        <input type="text" id="student_id" name="student_id" required><br><br>
-        
-        <label for="password">password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        
-        <button type="submit">Login</button>
-    </form>
-</body>
-</html>
+MongoClient.connect(url, function(err, client) {
+       if (err) {
+           console.log('Failed to connect to MongoDB:', err);
+       } else {
+           console.log('Connected to MongoDB successfully');
+
+           const db = client.db(dbName);
+
+           // 在这里执行您的数据库操作
+
+           client.close();
+       }
+   });
+   ```
+
