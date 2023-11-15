@@ -1,35 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create new student information</title>
-</head>
+app.post('/create', (req, res) => {
+  client.connect(function(err) {
+    if (err) {
+      console.error('Failed to connect to the MongoDB database server:', err);
+      return;
+    }
+    console.log("Connected successfully to the MongoDB database server.");
 
-<div>
-<body>
-    
-            <h1>Create New student Information</h1>
-      
-    <form action="/create" method="POST">
-        <label for="student_name">Student_name:</label>
-        <input type="text" id="student_name" name="student_name" required><br><br>
-        
-        <label for="student_id">Student_id:</label>
-        <input type="text" id="student_id" name="student_id" required><br><br>
-        
-        <label for="student_grade">Student_grade:</label>
-        <input type="text" id="student_grade" name="student_grade" required><br><br>
-        
-        <label for="average_mark">Average_mark:</label>
-        <input type="text" id="average_mark" name="average_mark" required><br><br>
-        
-        <label for="gender">Gender:</label>
-        <input type="text" id="gender" name="gender" required><br><br>
-        
-        <label for="other details">Other details:</label>
-        <input type="text" id="other details" name="other details" required><br><br>
-        
-        <button type="submit">create</button>
-    </form>    
-</body>
-</div>
-</html>
+    const db = client.db(dbName);
+
+    db.collection('student').insertOne({
+      "StudentName": req.body.student_name,
+      "StudentID": req.body.student_id
+    }, function(error, results) {
+      if (error) {
+        console.error('Failed to insert document:', error);
+        return;
+      }
+      console.log(results);
+      client.close(() => console.log(`Connected to Mongodb server.`));
+    });
+  });
+});
