@@ -1,29 +1,4 @@
-app.post('/create', (req, res) => {
-  client.connect(function(err) {
-    if (err) {
-      console.error('Failed to connect to the MongoDB database server:', err);
-      return;
-    }
-    console.log("Connected successfully to the MongoDB database server.");
+        throw new error_1.MongoParseError(`${optionWord} ${Array.from(unsupportedOptions).join(', ')} ${isOrAre} not supported`);
+        ^
 
-    const db = client.db(dbName);
-
-    db.collection('student').insertOne({
-      "StudentName": req.body.student_name,
-      "StudentID": req.body.student_id
-    }, function(error, results) {
-      if (error) {
-        console.error('Failed to insert document:', error);
-        client.close(() => {
-          console.log(`Failed to insert document. Disconnected from MongoDB server.`);
-          return;
-        });
-      }
-      console.log(results);
-      client.close(() => {
-        console.log(`Connected to Mongodb server.`);
-        res.redirect("/home");
-      });
-    });
-  });
-});
+MongoParseError: option useunified is not supported
