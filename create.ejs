@@ -6,7 +6,7 @@ const assert = require('assert');
 const url = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
 const dbName = 'test';
 const app = express();
-const client = new MongoClient(url);
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 const students = [
   { id: '123', password: '123' },
   { id: '456', password: '456' },
@@ -20,19 +20,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const createDocument = function(db, createddocuments, callback){
-    const client = new MongoClient(url);
-    client.connect(function(err) {
-        assert.equal(null, err);
-        console.log("Connected successfully to the MongoDB database server.");
-        const db = client.db(dbName);
-
-        db.collection('student').insertOne(createddocuments, function(error, results){
-            if(error){
-            	throw error
-            };
-            console.log(results);
-            return callback();
-        });
+    db.collection('student').insertOne(createddocuments, function(error, results){
+        if(error){
+            throw error;
+        }
+        console.log(results);
+        return callback();
     });
 }
 
@@ -40,7 +33,6 @@ app.get('/login', (req, res) => {
   console.log("Welcome!");
   return res.status(200).render("login", { error: null });
 });
-
 
 app.post('/login', (req, res) => {
   const studentId = req.body.studentId;
@@ -58,8 +50,6 @@ app.post('/login', (req, res) => {
   }
 });
 
-
-
 app.get('/home', (req, res) => {
   res.render('home.ejs');
 });
@@ -68,32 +58,25 @@ app.get('/create', (req, res) => {
   res.render('create.ejs');
 });
 
-
-
 app.post('/create', function(req, res){
-    const client = new MongoClient(url);
-    client.connect(function(err){
-        assert.equal(null, err);
-        console.log("Connected successfully to the DB server.");
-        const db = client.db(dbName);
+    documents["StudentName"] = req.body.student_name;        
+    documents["StudentId"] = req.body.student_id;        
         
-        documents["StudentName"] = req.body.student_name;        
-	documents["StudentId"] = req.body.student_id;        
-        
-        
-        if(documents.studentID){
-            console.log("...Creating the document");
-            createDocument(db, documents, function(docs){
-                client.close();
-                console.log("Closed DB connection");
-                return res.status(200).render('info', {message: "Document is created successfully!"});
-            });
-        } else{
-            client.close();
+    if(documents.studentID){
+        console.log("...Creating the document");
+        createDocument(client.db(dbName), documents, function(docs){
             console.log("Closed DB connection");
-            return res.status(200).render('info', {message: "Invalid entry - Student ID is compulsory!"});
-        }
-    });
+            return res.status(200).render('info', {message: "Document is created successfully!"});
+        });
+    } else{
+        console.log("Closed DB connection");
+        return res.status(200).render('info', {message: "Invalid entry - Student ID is compulsory!"});
+    }
 });
 
-app.listen(app.listen(process.env.PORT || 8899));
+client.connect(function(err){
+    assert.equal(null, err);
+    console.log("Connected successfully to the MongoDB database server.");
+    app.listen(process.env.PORT || 8899);
+});
+
