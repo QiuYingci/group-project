@@ -4,34 +4,35 @@ const session = require('cookie-session');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const url = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
-const dbName = 'test';
+const dbName ='test'; //test
 const app = express();
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(url);
 const students = [
-  { id: '123', password: '123' },
-  { id: '456', password: '456' },
-  { id: '789', password: '789' }
+  { id: '123', password: '123'},
+  { id: '456', password: '456'},
+  { id: '789', password: '789'}
 ];
-
-var documents = {};
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const createDocument = function(db, createddocuments, callback){
-    db.collection('student').insertOne(createddocuments, function(error, results){
-        if(error){
-            throw error;
-        }
-        console.log(results);
-        return callback();
-    });
-}
 
+ const createDocument = function(db,req){
+            client.connect(function(err) {assert.equal(null, err);
+                console.log("Connected successfully to the MongoDB database server.");})
+                db.collection('student').insertOne({"StudentName":req.body.student_name,"StudentID":req.body.student_id, function(error, results){if(error){
+                    throw error;
+                    console.log(results);}
+                    
+                ;}
+            })
+            client.close(() => console.log(`connected to Mongodb server.`));
+        }
+     
 app.get('/login', (req, res) => {
-  console.log("Welcome!");
-  return res.status(200).render("login", { error: null });
+  console.log("Welcome!")
+  return res.status(200).render("login",{error:null});
 });
 
 app.post('/login', (req, res) => {
@@ -41,42 +42,29 @@ app.post('/login', (req, res) => {
   const student = students.find(s => s.id == studentId);
 
   if (student && student.password === password) {
-    console.log('You are successful.');
+    console.log('you are successful.');
     res.redirect("/home");
-  } else {
+    
+ } else {
     const error = 'Incorrect password';
     console.log('Error.');
-    res.status(200).render('login', { error: error });
+    res.status(200).render('login',{error:error});
+    
   }
 });
-
-app.get('/home', (req, res) => {
-  res.render('home.ejs');
+ 
+ app.get('/home',(req,res) => {
+    res.render('home.ejs');
 });
+   
+  app.get('/create',(req,res) => {
+    res.render('create.ejs');
+});  
 
-app.get('/create', (req, res) => {
-  res.render('create.ejs');
-});
+   app.post('/create',(req,res) => {
+   const db=client.db(dbName);
 
-app.post('/create', function(req, res){
-    documents["StudentName"] = req.body.student_name;        
-    documents["StudentId"] = req.body.student_id;        
-        
-    if(documents.studentID){
-        console.log("...Creating the document");
-        createDocument(client.db(dbName), documents, function(docs){
-            console.log("Closed DB connection");
-            return res.status(200).render('info', {message: "Document is created successfully!"});
-        });
-    } else{
-        console.log("Closed DB connection");
-        return res.status(200).render('info', {message: "Invalid entry - Student ID is compulsory!"});
-    }
-});
-
-client.connect(function(err){
-    assert.equal(null, err);
-    console.log("Connected successfully to the MongoDB database server.");
-    app.listen(process.env.PORT || 8899);
-});
-
+   createDocument(db,req);
+    
+});  
+app.listen(process.env.PORT || 8899);
