@@ -1,5 +1,71 @@
-home/parallels/comp 381- project/node_modules/mongodb/lib/sessions.js:656
-        return new error_1.MongoExpiredSessionError();
-               ^
+const express = require('express');
+const bodyParser = require('body-parser');
+const session = require('cookie-session');
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const url = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
+const dbName ='test'; //test
+const app = express();
+const client = new MongoClient(url);
+const students = [
+  { id: '123', password: '123'},
+  { id: '456', password: '456'},
+  { id: '789', password: '789'}
+];
 
-MongoExpiredSessionError: Cannot use a session that has ended
+app.set('view engine', 'ejs');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+ const createDocument = function(db,req){
+                  db.collection('student').insertOne({"StudentName":req.body.student_name,"StudentID":req.body.student_id}, function(error, results){
+                if(error){
+                  throw error;}
+                 console.log(results);
+                
+            client.close(() => console.log(`connected to Mongodb server.`));
+        });
+     }
+app.get('/login', (req, res) => {
+  console.log("Welcome!")
+  return res.status(200).render("login",{error:null});
+});
+
+app.post('/login', (req, res) => {
+  const studentId = req.body.studentId;
+  const password = req.body.password;
+
+  const student = students.find(s => s.id == studentId);
+
+  if (student && student.password === password) {
+    console.log('you are successful.');
+    res.redirect("/home");
+    
+ } else {
+    const error = 'Incorrect password';
+    console.log('Error.');
+    res.status(200).render('login',{error:error});
+    
+  }
+});
+ 
+ app.get('/home',(req,res) => {
+    res.render('home.ejs');
+});
+   
+  app.get('/create',(req,res) => {
+    res.render('create.ejs');
+});  
+
+   app.post('/create',(req,res) => {
+   const db=client.db(dbName);
+   createDocument(db,req);
+    
+});  
+
+   client.connect(function(err) {assert.equal(null, err);
+   console.log("Connected successfully to the MongoDB database server.");
+                
+                
+                
+app.listen(process.env.PORT || 8899);
