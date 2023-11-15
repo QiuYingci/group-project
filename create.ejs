@@ -16,25 +16,22 @@ const students = [
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const collection = db.collection('student');
-const createdocument = function (db.createdocument,callback){
-  const client = new MongoClient(url);
-  client.connect((err) => {
-     assert.equal(null,err);
-     console.log("Connected successfully to server");
-     const db = client.db(dbName);
-  db.collection('student').insertOne(createdocument,function(err,result){
-    if (err){
-      console.log('Failed to insert document.');
-      throw error;
-    }else{
-      console.log('Document inserted successfully.');
-  }
-    callback(err,result);
-    return callback();
- });
-};
+const createDocument = function(db, createddocuments, callback){
+    const client = new MongoClient(url);
+    client.connect(function(err) {
+        assert.equal(null, err);
+        console.log("Connected successfully to the MongoDB database server.");
+        const db = client.db(dbName);
 
+        db.collection('student').insertOne(createddocuments, function(error, results){
+            if(error){
+            	throw error
+            };
+            console.log(results);
+            return callback();
+        });
+    });
+}
 
 app.get('/login', (req, res) => {
   console.log("Welcome!")
