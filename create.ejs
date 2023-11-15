@@ -1,4 +1,83 @@
-        throw new error_1.MongoParseError(`${optionWord} ${Array.from(unsupportedOptions).join(', ')} ${isOrAre} not supported`);
-        ^
+const express = require('express');
+const bodyParser = require('body-parser');
+const session = require('cookie-session');
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const url = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
+const dbName = 'test';
+const app = express();
+const client = new MongoClient(url,{useNewUrlParser:true,useUnified:true});
+const students = [
+  { id: '123', password: '123' },
+  { id: '456', password: '456' },
+  { id: '789', password: '789' }
+];
 
-MongoParseError: option useunified is not supported
+app.set('view engine', 'ejs');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
+app.get('/login', (req, res) => {
+  console.log("Welcome!");
+  return res.status(200).render("login", { error: null });
+});
+
+
+app.post('/login', (req, res) => {
+  const studentId = req.body.studentId;
+  const password = req.body.password;
+
+  const student = students.find(s => s.id == studentId);
+
+  if (student && student.password === password) {
+    console.log('You are successful.');
+    res.redirect("/home");
+  } else {
+    const error = 'Incorrect password';
+    console.log('Error.');
+    res.status(200).render('login', { error: error });
+  }
+});
+
+app.get('/home', (req, res) => {
+  res.render('home.ejs');
+});
+
+app.get('/create', (req, res) => {
+  res.render('create.ejs');
+});
+
+app.post('/create', (req, res) => {
+  client.connect(function(err) {
+    if (err) {
+      console.error('Failed to connect to the MongoDB database server:', err);
+      return;
+    }
+    console.log("Connected successfully to the MongoDB database server.");
+
+    const db = client.db(dbName);
+
+    db.collection('student').insertOne({
+      "StudentName": req.body.student_name,
+      "StudentID": req.body.student_id
+    }, function(error, results) {
+      if (error) {
+        console.error('Failed to insert document:', error);
+        client.close(() => {
+          console.log(`Failed to insert document. Disconnected from MongoDB server.`);
+          return;
+        });
+      }
+      console.log(results);
+      client.close(() => {
+        console.log(`Connected to Mongodb server.`);
+        res.redirect("/home");
+      });
+    });
+  });
+});
+
+
+app.listen(app.listen(process.env.PORT || 8899));
