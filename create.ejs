@@ -1,15 +1,11 @@
-db.collection('student').insertOne({"StudentName":req.body.student_name,"StudentID":req.body.student_id}, function(error, results){
-            if(error){
-                throw error;
-            }
-            console.log(results);
-            return callback();
-            client.close(() => console.log(`Closed to Mongodb server.`));
-        });
-      });
-     }
-     
-app.get('/login', (req, res) => {
-  console.log("Welcome!")
-  return res.status(200).render("login",{error:null});
-});
+ const createDocument = function(db,req){
+            client.connect(function(err) {assert.equal(null, err);
+                console.log("Connected successfully to the MongoDB database server.");})
+                db.collection('student').insertOne({"StudentName":req.body.student_name,"StudentID":req.body.student_id, function(error, results){if(error){
+                    throw error;
+                    console.log(results);}
+                    
+                ;}
+            })
+            client.close(() => console.log(`connected to Mongodb server.`));
+        }
