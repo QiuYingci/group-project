@@ -6,7 +6,7 @@ const assert = require('assert');
 const url = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
 const dbName = 'test';
 const app = express();
-const client = new MongoClient(url);
+const client = new MongoClient(url,{useNewUrlParser:true,useUnified:true});
 const students = [
   { id: '123', password: '123' },
   { id: '456', password: '456' },
