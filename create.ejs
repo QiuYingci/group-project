@@ -68,10 +68,11 @@ app.post('/create', (req, res) => {
         return;
       }
       console.log(results);
-     
+      client.close(() => {console.log(`Connected to Mongodb server.`);
+      res.redirect("/home");
     });
   });
-  client.close(() => console.log(`Connected to Mongodb server.`));
+ });
 });
 
 
