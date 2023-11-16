@@ -1,5 +1,13 @@
-pp.post('/search', (req, res) => {
-  const studentName = req.body.student_name;
+app.get('/search',(req,res) => {
+    res.render('search.ejs');
+});  
+
+app.post('/find', (req, res) => {
+  const student = [
+	{name: 'Ann', ID: '12345', gender:'F'},
+	{name: 'Jack', ID: '23456',gender:'F' },
+	{name: 'Amy', ID: '34567', gender:'F'}
+];
 
   client.connect((err) => {
     assert.equal(null, err);
@@ -11,8 +19,9 @@ pp.post('/search', (req, res) => {
       console.log("Query results:");
       for (doc of docs) {
         console.log(doc);
+        res.status(200).render("table", {c: students});	
       }
-      res.send(docs); // 将查询结果发送回客户端
+      res.send(docs); 
       client.close();
       console.log("Closed DB connection");
     });
