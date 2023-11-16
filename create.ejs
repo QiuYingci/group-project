@@ -1,120 +1,28 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const session = require('cookie-session');
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
-const url = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
-const dbName ='test'; //test
-const app = express();
-const client = new MongoClient(url);
-const students = [
-  { id: '123', password: '123'},
-  { id: '456', password: '456'},
-  { id: '789', password: '789'}
-];
-
-app.set('view engine', 'ejs');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-
- const createDocument = function(db,req){
-            client.connect(function(err) {assert.equal(null, err);
-                console.log("Connected successfully to the MongoDB server.");})
-                db.collection('student').insertOne({
-                "StudentName":req.body.student_name,
-                "StudentID":req.body.student_id,
-                "StudentGrade":req.body.student_grade,
-                "AverageMark":req.body.average_mark,
-                "StudentGender":req.body.gender,
-                 function(error, results){if(error){
-                    throw error;
-                    console.log(results);}
-                    
-                ;}
-            })
-            client.close(() => console.log(`connected to Mongodb server.`));
-        }
-     
-     
-     
-     
-app.get('/', function(req, res){
-    console.log("welcome back!");
-    res.redirect("/login");
-});
-     
-app.get('/login', (req, res) => {
-  console.log("Welcome!")
-  return res.status(200).render("login",{error:null});
-});
-
-
-app.post('/login', (req, res) => {
-  const studentId = req.body.studentId;
-  const password = req.body.password;
-
-  const student = students.find(s => s.id == studentId);
-
-  if (student && student.password === password) {
-    console.log('you are successful.');
-    res.redirect("/home");
-    
- } else {
-    const error = 'Incorrect password';
-    console.log('Error.');
-    res.status(200).render('login',{error:error});
-    
-  }
-});
- 
- 
-
-app.get('/search',(req,res) => {
-    res.render('search.ejs');
-});  
-
 app.post('/find', (req, res) => {
-  const students = [
-	{name: 'Ann', ID: '12345', gender:'F'},
-	{name: 'Jack', ID: '23456',gender:'F' },
-	{name: 'Amy', ID: '34567', gender:'F'}
-];
-  const studentId = '';
-  
- if (studentId === students.ID) {
-    console.log('you are successful.');
-    res.redirect("/table");
-    
- } else {
-    const error = 'Incorrect password';
-    console.log('Error.');
-    res.status(200).render('/search',{error:error});
-    
- 
-};
+  const studentId = req.body.studentId;
 
+  client.connect(function(err) {
+    assert.equal(null, err);
+    console.log("Connected successfully to the MongoDB server.");
 
+    const db = client.db(dbName);
+    const collection = db.collection('student');
 
- app.get('/home',(req,res) => {
-    res.render('home.ejs');
+    collection.findOne({ StudentID: studentId }, function(error, student) {
+      if (error) {
+        throw error;
+      }
+
+      if (student) {
+        console.log('Student found:', student);
+        res.render('student', { student: student });
+      } else {
+        const error = 'Student not found';
+        console.log('Error:', error);
+        res.status(200).render('search', { error: error });
+      }
+    });
+
+    client.close(() => console.log('Connected to MongoDB server closed.'));
+  });
 });
-   
-  app.get('/create',(req,res) => {
-    res.render('create.ejs');
-});  
-
-   app.post('/create',(req,res) => {
-   const db=client.db(dbName);
-
-   createDocument(db,req);
-    
-});  
-
-app.get('/logout', function(req, res){
-    console.log("Bye~~");
-    res.redirect('/login');
-});
-
-
-app.listen(process.env.PORT || 8899);
