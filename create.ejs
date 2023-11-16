@@ -1,6 +1,28 @@
-<h1>Student Information</h1>
-<p>Name: <%= student.StudentName %></p >
-<p>ID: <%= student.StudentID %></p >
-<p>Grade: <%= student.StudentGrade %></p >
-<p>Average Mark: <%= student.AverageMark %></p >
-<p>Gender: <%= student.StudentGender %></p >
+app.post('/find', (req, res) => {
+  const studentId = req.body.studentId;
+
+  client.connect(function(err) {
+    assert.equal(null, err);
+    console.log("Connected successfully to the MongoDB server.");
+
+    const db = client.db(dbName);
+    const collection = db.collection('student');
+
+    collection.findOne({ StudentID: studentId }, function(error, student) {
+      if (error) {
+        throw error;
+      }
+
+      if (student) {
+        console.log('Student found:', student);
+        res.render('student', { student: student });
+      } else {
+        const error = 'Student not found';
+        console.log('Error:', error);
+        res.status(200).render('search', { error: error });
+      }
+    });
+
+    client.close(() => console.log('Connected to MongoDB server closed.'));
+  });
+});
