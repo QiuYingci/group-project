@@ -1,34 +1,20 @@
-const criteria = { "studentId": "d" };
+pp.post('/search', (req, res) => {
+  const studentName = req.body.student_name;
 
-const findDocument = (db, criteria, callback) => {
-  let cursor = db.collection('student').find(criteria);
-  cursor.toArray((err, docs) => {
+  client.connect((err) => {
     assert.equal(null, err);
-    callback(docs);
-  });
-};
+    console.log("Connected successfully to server");
+    const db = client.db(dbName);
+    const criteria = { "studentName": studentName };
 
-client.connect((err) => {
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
-  const db = client.db(dbName);
-  findDocument(db, criteria, (docs) => {
-    console.log("Query results:");
-    for (doc of docs) {
-      console.log(doc);
-    }
-    client.close();
-    console.log("Closed DB connection");
+    findDocument(db, criteria, (docs) => {
+      console.log("Query results:");
+      for (doc of docs) {
+        console.log(doc);
+      }
+      res.send(docs); // 将查询结果发送回客户端
+      client.close();
+      console.log("Closed DB connection");
+    });
   });
 });
-
-
-app.get('/search',(req,res) => {
-    res.render('search.ejs');
-});  
-
-app.post('/search',(req,res) =>{
-
-    res.send(req.body.student_name);
-});
-
