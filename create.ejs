@@ -1,69 +1,33 @@
-<html>
-<head>
-  <title>MongoDB Information</title>
-</head>
-<body>
-  <h1>MongoDB Information</h1>
-  <form action="/getInfo" method="POST">
-    <label for="studentId">Student ID:</label>
-    <input type="text" id="studentId" name="studentId" required>
-    <button type="submit">Get Info</button>
-  </form>
-  <div id="info"></div>
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const http = require('http');
+const url = require('url');
+ 
+const mongourl = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
+const dbName = 'test';
+const client = new MongoClient(mongourl);
+ 
+const criteria = {"studentId": "d"};
 
-  <script>
-    document.querySelector('form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const studentId = document.getElementById('studentId').value;
-      fetch('/getInfo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ studentId: studentId })
-      })
-      .then(response => response.json())
-      .then(data => {
-        const infoDiv = document.getElementById('info');
-        if (data.error) {
-          infoDiv.textContent = data.error;
-        } else {
-          infoDiv.textContent = `Student Name: ${data.StudentName}, Student ID: ${data.StudentID}`;
+
+const findDocument = (db, criteria, callback) => {
+    let cursor = db.collection('bookings').find(criteria);
+    cursor.toArray((err,docs) => {
+        assert.equal(null,err);
+        callback(docs);
+    })
+}
+
+client.connect((err) => {
+    assert.equal(null, err);
+    console.log("Connected successfully to server");
+    const db = client.db(dbName);
+    findDocument(db, criteria, (docs) => {
+        client.close();
+        console.log("Closed DB connection");
+        for (doc of docs) {
+            console.log(doc);
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    });
-  </script>
-</body>
-</html>
-```
-
-在这个示例中，我们创建了一个表单，用户可以输入学生的 ID。当用户提交表单时，通过 JavaScript 发送一个 POST 请求到 `/getInfo` 路由，并将学生 ID 作为 JSON 数据发送。
-
-在服务器端，您可以添加以下代码来处理 `/getInfo` 路由，并从 MongoDB 中获取学生信息：
-
-```javascript
-app.post('/getInfo', (req, res) => {
-  const studentId = req.body.studentId;
-
-  const db = client.db(dbName);
-  db.collection('student').findOne({ StudentID: studentId }, (error, result) => {
-    if (error) {
-      console.error('Error:', error);
-      return res.status(500).json({ error: 'An error occurred' });
-    }
-
-    if (!result) {
-      return res.status(404).json({ error: 'Student not found' });
-    }
-
-    res.json(result);
-  });
+    })
 });
-```
-
-在这个示例中，我们使用 `findOne` 方法从 MongoDB 中查找具有指定学生 ID 的学生信息。如果找到了学生信息，我们将其作为 JSON 数据发送回客户端。如果出现错误或找不到学生信息，我们将相应的错误消息发送回客户端。
-
-请注意，您需要将这些代码添加到您的现有 Express 应用程序中，并确保 MongoDB 连接已正确设置。
+server.listen(process.env.PORT || 8099);
