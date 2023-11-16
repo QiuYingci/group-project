@@ -1,32 +1,38 @@
+const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const url = require('url');
+
 const app = express();
-const mongourl = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
+const mongourl = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?
+retryWrites=true&w=majority';
 const dbName = 'test';
 const client = new MongoClient(mongourl);
- 
-const criteria = {"studentId": "d"};
 
+const criteria = { "studentId": "d" };
 
 const findDocument = (db, criteria, callback) => {
-    let cursor = db.collection('student').find(criteria);
-    cursor.toArray((err,docs) => {
-        assert.equal(null,err);
-        callback(docs);
-    })
-}
+  let cursor = db.collection('student').find(criteria);
+  cursor.toArray((err, docs) => {
+    assert.equal(null, err);
+    callback(docs);
+  });
+};
 
 client.connect((err) => {
-    assert.equal(null, err);
-    console.log("Connected successfully to server");
-    const db = client.db(dbName);
-    findDocument(db, criteria, (docs) => {
-        client.close();
-        console.log("Closed DB connection");
-        for (doc of docs) {
-            console.log(doc);
-        }
-    })
+  assert.equal(null, err);
+  console.log("Connected successfully to server");
+  const db = client.db(dbName);
+  findDocument(db, criteria, (docs) => {
+    console.log("Query results:");
+    for (doc of docs) {
+      console.log(doc);
+    }
+    client.close();
+    console.log("Closed DB connection");
+  });
 });
-app.listen(process.env.PORT || 8099);
+
+app.listen(process.env.PORT || 8099, () => {
+  console.log(`Server running at http://localhost:${process.env.PORT || 8099}/`);
+});
