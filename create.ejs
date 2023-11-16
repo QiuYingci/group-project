@@ -1,8 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const http = require('http');
 const url = require('url');
- 
+const app = express();
 const mongourl = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
 const dbName = 'test';
 const client = new MongoClient(mongourl);
@@ -11,7 +10,7 @@ const criteria = {"studentId": "d"};
 
 
 const findDocument = (db, criteria, callback) => {
-    let cursor = db.collection('bookings').find(criteria);
+    let cursor = db.collection('student').find(criteria);
     cursor.toArray((err,docs) => {
         assert.equal(null,err);
         callback(docs);
@@ -30,4 +29,4 @@ client.connect((err) => {
         }
     })
 });
-server.listen(process.env.PORT || 8099);
+app.listen(process.env.PORT || 8099);
