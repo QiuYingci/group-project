@@ -1,9 +1,31 @@
-<html>
-<head>
-	<title>Student information</title>
-</head>
-<body>
-	<b>You are successful!</b>
-	<p><a href='/home'>Back to home. </a></p>
-</body>
-</html>
+const updateDocument = function(db, req) {
+  const collection = db.collection('student');
+
+  collection.updateOne(
+    { "StudentID": req.body.student_id },
+    {
+      $set: {
+        "StudentName": req.body.student_name,
+        "StudentGrade": req.body.student_grade,
+        "AverageMark": req.body.average_mark,
+        "StudentGender": req.body.gender
+      }
+    },
+    function(error, results) {
+      if (error) {
+        throw error;
+      }
+      console.log(results);
+    }
+  );
+};
+
+app.post('/update', (req, res) => {
+  const db = client.db(dbName);
+  console.log("Connected successfully to the MongoDB server.");
+  updateDocument(db, req);
+  res.redirect('/updateSucc');
+  console.log('Connected to MongoDB server closed.');
+});
+```
+
