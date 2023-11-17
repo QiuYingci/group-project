@@ -1,21 +1,30 @@
 const updateDocument = function(db, req) {
   const collection = db.collection('student');
 
-  collection.updateOne(
-    { "StudentID": req.body.student_id },
-    {
-      $set: {
-        "StudentName": req.body.student_name,
-        "StudentGrade": req.body.student_grade,
-        "AverageMark": req.body.average_mark,
-        "StudentGender": req.body.gender
-      }
-    },
-    function(error, results) {
-      if (error) {
-        throw error;
-      }
-      console.log(results);
+  // 查询学生信息
+  collection.findOne({ "StudentID": req.body.student_id }, function(error, student) {
+    if (error) {
+      throw error;
     }
-  );
+
+    // 构建更新操作的$set对象
+    const updateData = {
+      "StudentName": req.body.student_name || student.StudentName,
+      "StudentGrade": req.body.student_grade || student.StudentGrade,
+      "AverageMark": req.body.average_mark || student.AverageMark,
+      "StudentGender": req.body.gender || student.StudentGender
+    };
+
+    // 执行更新操作
+    collection.updateOne(
+      { "StudentID": req.body.student_id },
+      { $set: updateData },
+      function(error, results) {
+        if (error) {
+          throw error;
+        }
+        console.log(results);
+      }
+    );
+  });
 };
