@@ -1,20 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Search Restaurant Information</title>
-</head>
-<body>
-    <h1>Search Student Information</h1>
+<HTML>
+
+<BODY>
+
+  <head>
+    <title>Students</title>
+  </head>
+  <h1>Student Information</h1>
   
-    <form id="searchForm">
-        <label for="student_id">Please enter your student_id:</b></label><br>
-        <br><input type="text" id="studentId" name="studentId"></br>
-        <br><button type="submit">Search</button></br>
-    </form>
+  <% if (results){ %>
+  <p>Name: <%= results.StudentName %></p >
+  <p>ID: <%= results.StudentID %></p >
+  <p>Grade: <%= results.StudentGrade %></p >
+  <p>Average Mark: <%= results.AverageMark %></p >
+  <p>Gender: <%= results.StudentGender %></p >
+  <% } else { %>
+  <p> No student found.</p>
+  <% } %>  
+  
+</BODY>
 
-    <div id="searchResult"></div>
-
-    <p><a href="/home">Return home</a ></p>
-
-</body>
-</html>
+</HTML>
