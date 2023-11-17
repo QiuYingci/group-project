@@ -1,31 +1,22 @@
-const findDocument = function(db, req,callback) {
-  const collection = db.collection('student');
+<HTML>
 
-  collection.findOne({
-    "StudentID": req.body.student_id
-  }, function(error, results) {
-    if (error) {
-      throw error;
-    }
-    console.log(results);
-    callback(results);
-  });
-};
+<BODY>
 
+  <head>
+    <title>Students</title>
+  </head>
+  <h1>Student Information</h1>
+  
+  < % if (results){ % >
+  <p>Name: <%= results.StudentName %></p >
+  <p>ID: <%= results.StudentID %></p >
+  <p>Grade: <%= results.StudentGrade %></p >
+  <p>Average Mark: <%= results.AverageMark %></p >
+  <p>Gender: <%= results.StudentGender %></p >
+  < % } else { % >
+  <p> No student found.</p>
+  < % } %>  
+  
+</BODY>
 
-app.get('/searchSucc',(req,res) => {
-    res.render('searchSucc.ejs');
-}); 
-
-app.get('/search',(req,res) => {
-    res.render('search.ejs');
-});  
-
-app.post('/search', (req, res) => {
-  const db = client.db(dbName);
-  console.log("Connected successfully to the MongoDB server.");
-  findDocument(db, req, function(results){
-  res.render('searchSucc.ejs',{results:results});
-  console.log('Connected to MongoDB server closed.');
-});
-});
+</HTML>
