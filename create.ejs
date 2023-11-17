@@ -1,12 +1,7 @@
-<form action="/update" method="POST">
-  <input type="hidden" name="student_id" value="<%= student.StudentID %>">
-  <label for="student_name">Student Name:</label>
-  <input type="text" name="student_name" value="<%= student.StudentName %>">
-  <label for="student_grade">Student Grade:</label>
-  <input type="text" name="student_grade" value="<%= student.StudentGrade %>">
-  <label for="average_mark">Average Mark:</label>
-  <input type="text" name="average_mark" value="<%= student.AverageMark %>">
-  <label for="gender">Gender:</label>
-  <input type="text" name="gender" value="<%= student.StudentGender %>">
-  <button type="submit">Update</button>
-</form>
+pp.get('/edit/:studentId', function(req, res) {
+  // 根据studentId从数据库或其他数据源获取学生信息
+  var student = getStudentById(req.params.studentId);
+
+  // 渲染模板并传递学生信息
+  res.render('editStudent', { student: student });
+});
