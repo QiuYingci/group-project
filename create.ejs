@@ -38,6 +38,12 @@ const createDocument = function(db, req) {
 
 const findDocument = function(db, req,callback) {
   const collection = db.collection('student');
+  const results = new Array(
+    {"StudentName": results.student_name},
+    {"StudentGrade": results.student_grade},
+    {"AverageMark": results.average_mark},
+    {"StudentGender": results.gender}
+);
 
   collection.findOne({
     "StudentID": req.body.student_id
@@ -97,7 +103,9 @@ app.post('/login', (req, res) => {
   }
 });
  
- 
+ app.get('/searchSucc',(req,res) => {
+    res.render('searchSucc.ejs');
+}); 
 
 app.get('/search',(req,res) => {
     res.render('search.ejs');
