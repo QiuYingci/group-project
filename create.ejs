@@ -109,7 +109,7 @@ app.get('/search',(req,res) => {
 app.post('/search', (req, res) => {
   const db = client.db(dbName);
   console.log("Connected successfully to the MongoDB server.");
-  createDocument(db, req);
+  findDocument(db, req);
   res.redirect('/searchSucc');
   console.log('Connected to MongoDB server closed.');
 });
