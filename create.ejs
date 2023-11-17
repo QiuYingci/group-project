@@ -1,1 +1,22 @@
-<link rel="stylesheet" href="mystyle.css">
+<HTML>
+
+<BODY>
+
+  <head>
+    <title>Students</title>
+  </head>
+  <h1>Student Information</h1>
+  
+  <% if (results){ %>
+  <p>Name: <%= results.StudentName %></p >
+  <p>ID: <%= results.StudentID %></p >
+  <p>Grade: <%= results.StudentGrade %></p >
+  <p>Average Mark: <%= results.AverageMark %></p >
+  <p>Gender: <%= results.StudentGender %></p >
+  <% } else { %>
+  <p> No student found.</p>
+  <% } %>  
+  
+</BODY>
+
+</HTML>
