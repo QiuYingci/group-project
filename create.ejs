@@ -1,21 +1,155 @@
-<html>
-<head>
-    <title>Student login</title>
-</head>
-<body>
-    <h2>Student login</h2>
-    <% if (error){ %>
-    <p><%= error %></p>
-    <% } %>
+const express = require('express');
+const bodyParser = require('body-parser');
+const session = require('cookie-session');
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const ObjectID = require('mongodb').ObjectID;
+const url = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
+const dbName ='test'; //test
+const app = express();
+const client = new MongoClient(url);
+const students = [
+  { id: '123', password: '123'},
+  { id: '456', password: '456'},
+  { id: '789', password: '789'}
+];
+
+app.set('view engine', 'ejs');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const createDocument = function(db, req) {
+  const collection = db.collection('student');
+
+  collection.insertOne({
+    "StudentName": req.body.student_name,
+    "StudentID": req.body.student_id,
+    "StudentGrade": req.body.student_grade,
+    "AverageMark": req.body.average_mark,
+    "StudentGender": req.body.gender
+  }, function(error, results) {
+    if (error) {
+      throw error;
+    }
+    console.log(results);
+  });
+};
+
+
+const findDocument = function(db, req) {
+  const collection = db.collection('student');
+
+  collection.findOne({
+    "StudentID": req.body.student_id
+  }, function(error, results) {
+    if (error) {
+      throw error;
+    }
+    console.log(results);
+  });
+};
+
+const deleteDocument = function(db, req) {
+  const collection = db.collection('student');
+
+  collection.deleteOne({
+    "StudentName": req.body.student_name,
+    "StudentID": req.body.student_id,
+    "StudentGrade": req.body.student_grade,
+    "AverageMark": req.body.average_mark,
+    "StudentGender": req.body.gender
+  }, function(error, results) {
+    if (error) {
+      throw error;
+    }
+    console.log(results);
+  });
+};
+
+
+app.get('/', function(req, res){
+    console.log("welcome!");
+    res.redirect("/login");
+});
+     
+app.get('/login', (req, res) => {
+  console.log("Welcome!")
+  return res.status(200).render("login",{error:null});
+});
+
+
+app.post('/login', (req, res) => {
+  const studentId = req.body.studentId;
+  const password = req.body.password;
+
+  const student = students.find(s => s.id == studentId);
+
+  if (student && student.password === password) {
+    console.log('you are successful.');
+    res.redirect("/home");
+    
+ } else {
+    const error = 'Incorrect password';
+    console.log('Error.');
+    res.status(200).render('login',{error:error});
+    
+  }
+});
+ 
+ 
+
+app.get('/search',(req,res) => {
+    res.render('search.ejs');
+});  
+
+app.post('/search', (req, res) => {
+  const db = client.db(dbName);
+  console.log("Connected successfully to the MongoDB server.");
+  findDocument(db, req);
+  res.redirect('/searchSucc');
+  console.log('Connected to MongoDB server closed.');
+});
+
+ app.get('/home',(req,res) => {
+    res.render('home.ejs');
+});
    
-    <form action="/login" method="POST">
-        <label for="studentId">student_id:</label>
-        <input type="text" id="studentId" name="studentId" required><br><br>
-        
-        <label for="password">password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        
-        <button type="submit">Login</button>
-    </form>
-</body>
-</html>
+  app.get('/create',(req,res) => {
+    res.render('create.ejs');
+});  
+
+  app.post('/create', (req, res) => {
+  const db = client.db(dbName);
+  console.log("Connected successfully to the MongoDB server.");
+  createDocument(db, req);
+  res.redirect('/createSucc');
+  console.log('Connected to MongoDB server closed.');
+});
+
+ app.get('/createSucc',(req,res) => {
+    res.render('createSucc.ejs');
+});
+
+app.get('/delete',(req,res) => {
+    res.render('delete.ejs');
+});  
+
+  app.post('/delete', (req, res) => {
+  const db = client.db(dbName);
+  console.log("Connected successfully to the MongoDB server.");
+  deleteDocument(db, req);
+  res.redirect('/deleteSucc');
+  console.log('Connected to MongoDB server closed.');
+});
+
+ app.get('/deleteSucc',(req,res) => {
+    res.render('deleteSucc.ejs');
+});
+
+app.get('/logout', function(req, res){
+    console.log("Bye~~");
+    res.redirect('/login');
+});
+
+
+app.listen(process.env.PORT || 8899);
