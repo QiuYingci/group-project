@@ -1,9 +1,15 @@
-<div><br class="Apple-interchange-newline"><!DOCTYPE html>
+<br class="Apple-interchange-newline"><!DOCTYPE html>
 <html>
 <head>
     <title>Create new student information</title>
-    <style>
-body   background-color: #F5FFFA;h1   border-left: 6px solid #D3D3D3;  margin-top: 60px;  margin-bottom: 1px;  margin-right: 400px;  margin-left: 350px;  background-color: #F5F5DC;  padding: 15px;form   background-color: lightgrey;  width: 300px;  border: 60px solid #708090;  padding: 50px;  margin-top: 1px;  margin-bottom: 1px;  margin-right: 400px;  margin-left: 350px;</style></head>
+<style>
+body{background-color: #F5FFFA;}
+
+h1{border-left: 6px solid #D3D3D3;  margin-top: 60px;  margin-bottom: 1px;  margin-right: 400px;  margin-left: 350px;  background-color: #F5F5DC;  padding: 15px;}
+
+form{background-color: lightgrey;  width: 300px;  border: 60px solid #708090;  padding: 50px;  margin-top: 1px;  margin-bottom: 1px;  margin-right: 400px;  margin-left: 350px;}
+</style>
+</head>
 
 <div>
 <body>
@@ -31,14 +37,4 @@ body   background-color: #F5FFFA;h1   border-left: 6px solid #D3D3D3;  margin-to
     </form>    
 </body>
 </div>
-</html>
-
-<html>
-<head>
-<title>Student information</title>
-<style>body   background-color: #F5FFFA;p   margin: 30px;</style></head>
-<body>
-	<p><span style="font-weight:bold;">You are successful!</span></p>
-	<p><a href='/home'>Back to home. </a></p>
-</body>
 </html>
