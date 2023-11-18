@@ -1,0 +1,26 @@
+<HTML>
+
+<BODY>
+
+  <head>
+    <title>Students</title>
+<style>
+body{   background-color: #F5FFFA;}
+h2{   border-left: 6px solid #D3D3D3;  margin-top: 60px;  margin-bottom: 1px;  margin-right: 550px;  margin-left: 350px;  background-color: #F5F5DC;  padding: 15px;}
+p{   border: 6px solid #D2B48C;  margin-top: 1px;  margin-bottom: 1px;  margin-right: 400px;  margin-left: 350px;  background-color: #FAFAD2;  padding: 30px;}
+</style>  </head>
+  <h2>Student Information</h2>
+  
+  <% if (results){ %>
+  <p>Name: <%= results.StudentName %></p >
+  <p>ID: <%= results.StudentID %></p >
+  <p>Grade: <%= results.StudentGrade %></p >
+  <p>Average Mark: <%= results.AverageMark %></p >
+  <p>Gender: <%= results.StudentGender %></p >
+  <% } else { %>
+  <p> No student found.</p>
+  <% } %>  
+  
+</BODY>
+
+</HTML>
