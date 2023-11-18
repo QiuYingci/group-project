@@ -34,23 +34,20 @@ const createDocument = function(db, req) {
       return;
     }
     console.log(results);
-    res.redirect('/createSucc');
   });
 };
 
 
-const findDocument = function(db, studentId,callback) {
-  const collection = db.collection('student');
+const findDocument = async function(db, studentid) {
+  try {
+    const result= await db.collection('student').findOne({"StudentID":`${studentid}`});
+    console.log(result);
+    return result;
+    
+  } catch (error) {
+    console.error(error);
+  }
 
-  collection.findOne({
-    "StudentID": studentId
-  }, function(error, results) {
-    if (error) {
-      throw error;
-    }
-    console.log(results);
-    callback(results);
-  });
 };
 
 const deleteDocument = function(db, req) {
@@ -131,23 +128,22 @@ app.post('/login', (req, res) => {
 });
  
  app.get('/searchSucc',(req,res) => {
-    res.render('searchSucc.ejs',);
+    res.render('searchSucc.ejs',{results:null});
 }); 
 
 app.get('/search',(req,res) => {
-    res.render('search.ejs');
+    res.render('search.ejs',{results:null});
 });  
 
-app.post('/search', (req, res) => {
+app.post('/search', async(req, res) => {
   const db = client.db(dbName);
+  studentid=req.body.student_id;
   console.log("Connected successfully to the MongoDB server.");
-  const studentId = req.body.student_id;
-  findDocument(db, studentId, function(results){
-  res.render('searchSucc.ejs',{results:results});
-  res.redirect('searchSucc.ejs');
+  const results =await findDocument(db,studentid);
+  res.render('search.ejs',{results:results || null});
   console.log('Connected to MongoDB server closed.');
 });
-});
+
 
    
   app.get('/create',(req,res) => {
