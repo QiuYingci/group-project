@@ -1,34 +1,33 @@
-app.get('/students', (req, res) => {
-  const db = client.db(dbName);
-  console.log("Connected successfully to the MongoDB server.");
-
-  const collection = db.collection('student');
-
-  collection.find({}).toArray(function(error, results) {
-    if (error) {
-      console.error(error);
-      res.status(500).send('Error retrieving students');
-      return;
-    }
-    console.log(results);
-    res.render('students', { students: results });
-  });
-});
-
-<!DOCTYPE html>
+<div><br class="Apple-interchange-newline"><!DOCTYPE html>
 <html>
 <head>
-  <title>Students</title>
-</head>
+    <title>Create new student information</title>
+    <style>body   background-color: #F5FFFA;h1   border-left: 6px solid #D3D3D3;  margin-top: 60px;  margin-bottom: 1px;  margin-right: 400px;  margin-left: 350px;  background-color: #F5F5DC;  padding: 15px;form   background-color: lightgrey;  width: 300px;  border: 60px solid #708090;  padding: 50px;  margin-top: 1px;  margin-bottom: 1px;  margin-right: 400px;  margin-left: 350px;</style></head>
+
+<div>
 <body>
-  <h1>Students</h1>
-  <% students.forEach(function(student) { %>
-    <p>Student Name: <%= student.StudentName %></p >
-    <p>Student ID: <%= student.StudentID %></p >
-    <p>Student Grade: <%= student.StudentGrade %></p >
-    <p>Average Mark: <%= student.AverageMark %></p >
-    <p>Student Gender: <%= student.StudentGender %></p >
-    <hr>
-  <% }) %>
+    
+            <h1>Create New student Information</h1>
+      
+    <form action="/create" method="POST">
+        <label for="student_name">Student_name:</label>
+        <input type="text" id="student_name" name="student_name" required><br><br>
+        
+        <label for="student_id">Student_id:</label><br>
+        <input type="text" id="student_id" name="student_id" required><br><br>
+        
+        <label for="student_grade">Student_grade:</label>
+        <input type="text" id="student_grade" name="student_grade" required><br><br>
+        
+        <label for="average_mark">Average_mark:</label>
+        <input type="text" id="average_mark" name="average_mark" required><br><br>
+        
+        <label for="gender">Gender:</label><br>
+        <input type="text" id="gender" name="gender" required><br><br>
+        
+        
+        <button type="submit">create</button>
+    </form>    
 </body>
+</div>
 </html>
