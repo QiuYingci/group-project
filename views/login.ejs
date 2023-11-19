@@ -62,14 +62,14 @@
 </head>
 
 <body>
-    <h2>Student login</h2>
+    <h2>User login</h2>
     <% if (error){ %>
     <p class="error"><%= error %></p >
     <% } %>
 
     <form action="/login" method="POST">
-        <label for="studentId">Student ID:</label>
-        <input type="text" id="studentId" name="studentId" required>
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" name="userId" required>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
