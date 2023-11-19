@@ -4,7 +4,7 @@ const session = require('cookie-session');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const ObjectID = require('mongodb').ObjectID;
-const url = ' ';
+const url = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
 const dbName ='test'; //test
 const app = express();
 const client = new MongoClient(url,{useNewUrlParser:true,useUnifiedTopology:true});
