@@ -4,11 +4,11 @@ const session = require('cookie-session');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const ObjectID = require('mongodb').ObjectID;
-const url = 'mongodb+srv://Qiuyingci:Qyc052714@cluster0.jvmayzu.mongodb.net/?retryWrites=true&w=majority';
+const url = ' ';
 const dbName ='test'; //test
 const app = express();
 const client = new MongoClient(url,{useNewUrlParser:true,useUnifiedTopology:true});
-const students = [
+const users = [
   { id: '123', password: '123'},
   { id: '456', password: '456'},
   { id: '789', password: '789'}
@@ -113,7 +113,7 @@ app.post('/login', (req, res) => {
   const studentId = req.body.studentId;
   const password = req.body.password;
 
-  const student = students.find(s => s.id == studentId);
+  const student = users.find(s => s.id == studentId);
 
   if (student && student.password === password) {
     console.log('you are successful.');
