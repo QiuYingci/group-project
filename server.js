@@ -110,12 +110,12 @@ app.get('/login', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-  const studentId = req.body.studentId;
+  const userId = req.body.userId;
   const password = req.body.password;
 
-  const student = users.find(s => s.id == studentId);
+  const user = users.find(u => u.id == userId);
 
-  if (student && student.password === password) {
+  if (user && user.password === password) {
     console.log('you are successful.');
     res.redirect("/home");
     
@@ -127,9 +127,7 @@ app.post('/login', (req, res) => {
   }
 });
  
- app.get('/searchSucc',(req,res) => {
-    res.render('searchSucc.ejs',{results:null});
-}); 
+
 
 app.get('/search',(req,res) => {
     res.render('search.ejs',{results:null});
