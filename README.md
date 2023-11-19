@@ -9,7 +9,7 @@ Application link: https://qqq-c70m.onrender.com
 
 ********************************************
 # Login
-studentId and password:
+userId and password:
   { id: '123', password: '123'}
   { id: '456', password: '456'}
   { id: '789', password: '789'}
@@ -30,10 +30,9 @@ The home page includes a logout button that can be clicked to return to the logi
    4.StudentGrade
    5.Gender
 All information is required, no one can do without it.
-All the student information created is visible on mongodb, the system displays
-create success when the creation is complete and user can click the button to home page.
+All the student information created is visible on mongodb, the system displays 'create success' when the creation is complete and user can click the button to home page.
 ·Search
-  User can find all  student information by entering student id, if the id is correct, the system will display the information, if it is incorrect, it will not be displayed.
+  User can find all student information by entering student id, if the id is correct, the system will display the information, if it is incorrect, it will not be displayed.
 ·Update
 Update Student Information：
    1.StudentId
@@ -41,14 +40,14 @@ Update Student Information：
    3.AverageMark
    4.StudentGrade
    5.Gender
-User can update all student information by entering student id, but all information must be filled out. The system displays update success when the creation is complete and user can click the button to home page.
+User can update all student information by entering student id, but all information must be filled out. The system displays 'update success' when the creation is complete and user can click the button to home page.
 ·Delete
 User can delete all information about a student by entering student id.
 
 ********************************************
 
 # Restful
-In this project, there are three HTTP request types : post, get and delete.
+In this project, there are three HTTP request types : post, get.
 For all restful CRUD services, login should be done at first.
 - Post 
         Post request is used for insert.
@@ -57,8 +56,7 @@ For all restful CRUD services, login should be done at first.
         2. POST /search :curl -X POST -d "student_id=123" http://localhost:8899/search
         3. POST /create :curl -X POST -d "student_id=123&student_name=John&student_grade=10&average_mark=90&gender=Male" http://localhost:8899/create
         4. POST /delete :curl -X POST -d "student_id=123" http://localhost:8899/delete
-        5. POST /update :curl -X POST -d 
-"student_id=123&student_name=John&student_grade=11&average_mark=95&gender=Male" http://localhost:8899/update
+        5. POST /update :curl -X POST -d "student_id=123&student_name=John&student_grade=11&average_mark=95&gender=Male" http://localhost:8899/update
 
 - Get
 	Get request is used for find.
